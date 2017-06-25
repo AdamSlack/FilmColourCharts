@@ -1,6 +1,14 @@
 import cv2
 import numpy as np
 import os
+from PIL import Image
+
+def save_lower_resolution(file_path):
+    no_extension = file_path.split('.')[0]
+    im = Image.open(file_path)
+    size = 320, 240
+    im_resized = im.resize(size, Image.ANTIALIAS)
+    im_resized.save(no_extension + "lower.png", 'PNG')
 
 def create_fp_string(folder_id, file_name):
     return 'film/' + folder_id + '/video/' + file_name
@@ -14,7 +22,7 @@ def get_file_name(folder_id):
     return available_files[0]
 
 
-folder_id = '00002' # id will come from cmd line arg.
+folder_id = '00003' # id will come from cmd line arg.
 
 file_name = get_file_name(folder_id)
 dir_path = create_path_string(folder_id, 'video')
@@ -27,8 +35,8 @@ cs = []
 # print(cs[0])
 
 # Output Init.
-height = 16000
-width = 12000
+height = 10000
+width = 6000
 chart = np.zeros((height, width, 3), np.uint8)
 
 # vieo processing
@@ -61,7 +69,7 @@ while cap.isOpened():
             chart[currPos:(currPos + lineHeight), :] = (c[0], c[1], c[2])
             currPos += lineHeight
 
-        cv2.imwrite(frame_path + file_name + str(n) + '.png', img)
+        cv2.imwrite(frame_path + file_name.split('.')[0] + str(n) + '.png', img)
         n += 1
     elif not frameRead:
         break
@@ -80,4 +88,5 @@ for c in cs:
     chart[currPos:(currPos + lineHeight), :] = (c[0], c[1], c[2])
     currPos += lineHeight
 
-cv2.imwrite(output_path + file_name + 'Chart.png', chart, )
+cv2.imwrite(output_path + file_name.split('.')[0] + 'chart.png', chart, )
+save_lower_resolution(file_path=str(output_path + file_name.split('.')[0] + 'chart.png'))
