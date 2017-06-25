@@ -27,8 +27,8 @@ cs = []
 # print(cs[0])
 
 # Output Init.
-height = 4000
-width = 3000
+height = 16000
+width = 12000
 chart = np.zeros((height, width, 3), np.uint8)
 
 # vieo processing
@@ -37,8 +37,9 @@ n = 0
 while cap.isOpened():
 
     frameRead, img = cap.read()
-    frameNum = int(i % 50)
+    frameNum = int(i % 75)
     if frameRead and frameNum == 0:
+        print(i)
         z = img.reshape((-1, 3))
         z = np.float32(z)
 
